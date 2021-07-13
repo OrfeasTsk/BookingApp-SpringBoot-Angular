@@ -1,0 +1,65 @@
+.photo {
+  grid-area: photo;
+}
+
+.name{
+  grid-area: name;
+}
+
+.cost{
+  grid-area: cost;
+}
+
+.type{
+  grid-area: type;
+}
+
+.link{
+  grid-area: link;
+}
+
+.reviews{
+
+  grid-area: reviews;
+
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+
+button{
+  background-color: deepskyblue;
+  font-size: medium;
+  color: ghostwhite;
+  margin-right: 10px;
+  padding: 10px 30px 10px 30px;
+}
+
+.grid-container{
+  display: grid;
+  grid-template-areas:
+    'photo name cost'
+    'photo type reviews'
+    'photo . link';
+  grid-gap: 10px;
+  grid-template-columns: min-content 3fr 1.2fr;
+  box-shadow: -1px 4px 2px 0 lightskyblue;
+  border-style: solid;
+  border-color: royalblue;
+  border-width: 0.5px 0.5px 0.5px 0.5px;
+  margin: 0 auto 10px auto;
+  overflow: hidden;
+  width: 1000px;
+
+}
+
+.grid-container > div {
+  text-align: center;
+  padding: 10px 5px;
+  font-size: 30px;
+  overflow: hidden;
+}

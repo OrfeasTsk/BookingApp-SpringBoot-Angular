@@ -1,0 +1,237 @@
+.grid-container{
+  display: grid;
+  grid-template-areas:
+    'mainphoto mainphoto mainphoto details r'
+    'carousel carousel carousel details r '
+    'carousel carousel carousel map r'
+    ' carousel carousel carousel  map r'
+    'reviews reviews reviews profile r'
+    'reviews reviews reviews . r '
+    ' . . . hostreviews r';
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fill , minmax(400px,800px));
+  margin-top: 30px;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.r{ grid-area: r; margin-right: 150px }
+
+.dep_map { height: 400px; width: 450px; grid-area: map; margin: 0 50px 0 auto }
+
+
+.photo{
+  grid-area: mainphoto;
+  margin: 0 auto 50px auto;
+  position: relative;
+}
+
+.photos {
+  grid-area: carousel;
+  margin: 0 auto;
+  position: relative;
+}
+
+.details {
+  grid-area: details;
+  margin-left: 50px;
+  overflow-wrap: break-word;
+}
+
+ngb-carousel {
+  width: 900px;
+  margin: 0 auto;
+}
+
+img:hover{
+  opacity: 0.5;
+}
+
+img:hover ~ .button{
+  display: block;
+
+}
+
+
+.button:hover {
+  display: block;
+}
+
+.op{
+  opacity: 0.5;
+}
+
+.button{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  height: 40px;
+  border-radius: 6px;
+  display: none;
+}
+
+input[type="file"]{
+  display: none;
+}
+
+
+
+.carousel-item {
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out, visibility 1.2s;
+  z-index: -1;
+}
+
+
+
+.description {
+  border-bottom: 1px solid #E1E8EE;
+  margin-bottom: 20px;
+  clear: both;
+}
+
+.description h1 {
+  font-weight: lighter;
+  font-size: 52px;
+  color: #43484D;
+  letter-spacing: 2px;
+  width: 400px;
+}
+.description p {
+  font-size: 16px;
+  font-weight: lighter;
+  color: #86939E;
+  line-height: 24px;
+}
+
+
+.price span {
+  font-size: 26px;
+  font-weight: 300;
+  color: #43474D;
+  margin-right: 20px;
+}
+
+.cart-btn {
+  display: inline-block;
+  background-color: #7DC855;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 25px;
+  margin: 0 auto;
+  text-align: center;
+}
+.cart-btn:hover {
+  background-color: #64af3d;
+  cursor: pointer;
+}
+
+.addphoto-btn {
+  display: inline-block;
+  background-color: dodgerblue;
+  border-radius: 6px;
+  font-size: 16px;
+  color: whitesmoke;
+  text-decoration: none;
+  padding: 10px 25px;
+  grid-area: addphoto;
+}
+.addphoto-btn:hover {
+  background-color: royalblue;
+  cursor: pointer;
+}
+
+.buttondisabled{
+  opacity: 0.6;
+}
+
+.stars{
+
+  transform: rotateY(180deg);
+}
+
+.stars > span{
+  margin-left: 5px;
+  cursor: pointer;
+  transition: 0.4s;
+  color: lightgray;
+}
+
+.stars > .clicked{
+  color: gold;
+}
+
+.stars > span:hover{
+  color: gold;
+}
+.star1:hover ~span{
+  color: gold;
+}
+.star2:hover ~span{
+  color: gold;
+}
+.star3:hover ~span{
+  color: gold;
+}
+.star4:hover ~span{
+  color: gold;
+}
+
+
+
+.colored{
+  color: gold;
+}
+
+.rev-stars{
+  color: lightgray;
+}
+
+
+.reviews{
+  grid-area: reviews;
+  position: relative;
+}
+
+.host-reviews{
+  grid-area: hostreviews;
+  position: relative;
+}
+
+
+.review{
+  box-shadow: -1px 4px 2px 0 lightskyblue;
+  border-style: solid;
+  border-color: royalblue;
+  border-width: 0.5px 0.5px 0.5px 0.5px;
+  margin: 0 auto 10px auto;
+  overflow: hidden;
+  width: 800px;
+  height: max-content;
+  padding: 10px 30px 30px 40px;
+}
+
+.card {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  background-color: lightsteelblue;
+  color: darkblue;
+}
+.list-group-item{
+  background-color: lightsteelblue;
+  color: darkblue;
+}
+
+.card img{
+  display: block;
+  margin: 20px auto;
+}
+
+.card img:hover{
+  opacity: 1;
+}

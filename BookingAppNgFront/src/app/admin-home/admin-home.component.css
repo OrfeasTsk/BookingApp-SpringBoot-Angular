@@ -1,0 +1,18 @@
+.header {
+  padding: 30px;
+  text-align: center;
+  background: skyblue;
+  color: whitesmoke;
+  font-size: 20px;
+}
+
+.list-group{
+  column-count: 2;
+  width: 700px;
+  margin: 20px auto;
+}
+
+h1{
+  text-align: center; margin-bottom: 40px; margin-top: 20px; color: darkslateblue; display: block; font-weight: 350; font-style: oblique;
+  font-size: 30px;
+}

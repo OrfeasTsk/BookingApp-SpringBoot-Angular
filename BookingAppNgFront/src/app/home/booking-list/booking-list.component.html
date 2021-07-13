@@ -1,0 +1,37 @@
+<h1 for="bookings">Your bookings</h1>
+<div id="bookings" >
+  <div  *ngFor="let booking of bookings  | paginate: { id: 'deplist',
+                                                      itemsPerPage: 5,
+                                                      currentPage: page,
+                                                      totalItems: bookings.length }">
+
+      <div class="container text-center">
+        <div style="margin-bottom: 10px ">
+          <span ><b> Department name: </b></span>
+          <span>{{booking.department.name}}</span>
+        </div>
+        <div style="margin-bottom: 10px ">
+          <span ><b>Adults: </b></span>
+          {{booking.numberOfAdults}}
+        </div>
+        <div style="margin-bottom: 10px ">
+          <span ><b>Children: </b> </span>
+          {{booking.numberOfChildren}}
+        </div>
+        <div style="margin-bottom: 10px ">
+          <span><b>Daily cost:</b></span>
+          {{findCost(booking)}} €
+        </div>
+        <div>
+          <label style="margin-right: 15px" for="check-in"><b>Check In</b></label>
+          <label style="padding-left: 50px" for="check-out"><b>Check Out</b></label>
+        </div>
+        <span id="check-in">{{makeDate(booking.startDate).toString().slice(0,15)}}</span> -> <span id="check-out">{{makeDate(booking.endDate).toString().slice(0,15)}}</span>
+        <div >
+          <button *ngIf=" makeDate(booking.endDate).getTime() >= makeDate(currentDate).getTime() " type="button" class="btn btn-danger" style="background-color: red; position: relative; right: 350px " (click)="cancel(booking)" >Cancel</button>
+          <button  type="button" class="btn" style="position: relative; left:350px" (click)="redirectToDetails(booking)" >Show department</button>
+        </div>
+      </div>
+  <pagination-controls  *ngIf="bookings && bookings.length > 5" style="position: relative; right: 40px"   id="deplist" (pageChange)="page = $event"></pagination-controls>
+</div>
+

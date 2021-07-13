@@ -1,0 +1,19 @@
+<header>
+<nav>
+  <button *ngIf="userDetails" style="margin: 5px 0 0 5px" class="btn float-left" [routerLink]="makeRedirectUrl()" ><i class="fa fa-home"></i> Home</button>
+  <button routerLink ="/hostpage/departmentregister" *ngIf="hasRole('ROLE_HOST')" style="margin: 5px 0 0 5px" class="btn float-left"><i class="fa fa-plus" aria-hidden="true"></i> Add department</button>
+  <button routerLink ="/homepage/bookings" *ngIf="hasRole('ROLE_TENANT')" style="margin: 5px 0 0 5px" class="btn float-left"><i class="fa fa-book" aria-hidden="true"></i> Bookings</button>
+  <button routerLink ="/adminpage/exportdata" *ngIf="hasRole('ROLE_ADMIN')" style="margin: 5px 0 0 5px" class="btn float-left"><i class="fa fa-database" aria-hidden="true"></i> Export</button>
+  <button *ngIf="!userDetails" type="button" class="btn float-right" routerLink="/signup">Sign up</button>
+  <button *ngIf="!userDetails" type="button" class="btn float-right" routerLink="/login">Log in</button>
+  <button *ngIf="userDetails" type="button" class="btn float-right" (click)="logout()" >Log out</button>
+  <button *ngIf="userDetails" type="button" class="btn float-right" (click)="goToProfile()" ><i class="fa fa-user-circle-o" aria-hidden="true"></i> Profile </button>
+  <button *ngIf="userDetails && (hasRole('ROLE_HOST') || hasRole('ROLE_TENANT'))" type="button" class="btn float-right" [routerLink]="'users/' + userDetails.id.toString() + '/messages'" ><i class="fa fa-comments" aria-hidden="true"></i> Messages</button>
+    <h1 ><a [routerLink]="makeRedirectUrl()" ><span style="color : ghostwhite">GO</span> <span style="color : indianred">BOOKING</span></a></h1>
+
+</nav>
+</header>
+
+<div style="clear: both"></div>
+
+<router-outlet></router-outlet>

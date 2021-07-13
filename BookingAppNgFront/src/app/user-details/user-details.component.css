@@ -1,0 +1,44 @@
+.card {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  background-color: lightsteelblue;
+  color: darkblue;
+}
+
+.list-group-item{
+  background-color: lightsteelblue;
+  color: darkblue;
+}
+
+img:hover{
+  opacity: 0.5;
+}
+
+img:hover ~ .button{
+  display: block;
+
+}
+
+
+.button:hover {
+  display: block;
+}
+
+.op{
+  opacity: 0.5;
+}
+
+.button{
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  height: 40px;
+  border-radius: 6px;
+  display: none;
+}
+
+input[type="file"]{
+  display: none;
+}

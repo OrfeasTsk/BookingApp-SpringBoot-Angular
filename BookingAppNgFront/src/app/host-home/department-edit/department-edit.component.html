@@ -1,0 +1,163 @@
+<div style="margin-top: 10vh; width: 50vw;
+  margin-left : 25%; margin-bottom: 10vh">
+  <div *ngIf="submiterror && dangerBox" class="alert alert-danger" role="alert">
+    <small class="text-danger" >{{submiterror.error.message}}</small>
+    <button style="color: #ff0b00; background-color: transparent" type="button" class="close" aria-label="Close" (click)="dangerBox = false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div *ngIf="submitmsg && successBox" class="alert alert-success" role="alert">
+    <small class="text-success" >{{submitmsg}}</small>
+    <button style="color: green; background-color: transparent" type="button" class="close" aria-label="Close" (click)="successBox = false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <form name="form" #depeditform="ngForm" (ngSubmit)="submit()">
+    <h2 style="text-align: center">Edit department</h2>
+    <div class="form-group">
+      <label for="name" >Department name</label>
+      <input type="text" class="form-control" id="name" placeholder="Change department name" [(ngModel)]="department.name" name="nameinput">
+    </div>
+    <div class="form-group">
+      <label for="cost" >Cost per day (euros)</label>
+      <input type="number" class="form-control" id="cost" placeholder="Change cost per day" [(ngModel)]="department.costPerDay" name="costinput" min="0" value="0" step="0.01">
+    </div>
+    <div class="form-group">
+      <label for="costperson" >Cost per person (euros)</label>
+      <input type="number" class="form-control" id="costperson" placeholder="Change cost per person" [(ngModel)]="department.costPerPerson" name="costpersoninput" min="0" value="0" step="0.01">
+    </div>
+    <div class="form-group" >
+      <label for="area">Area (squaremeters) </label>
+      <input type="number" class="form-control" id="area" placeholder="Change area" [(ngModel)]="department.area" name="areainput" min="0" value="0" step="0.01">
+    </div>
+    <label for="dates">Availability </label>
+    <div id="dates" class="form-group" >
+      <label for="startdate" >Start date</label>
+      <input #stdate type="date"  style="width: 170px; display: inline; margin-left: 5px; margin-right: 5px" class="form-control" id="startdate"  name="startdateinput" [ngModel]="department.startDate | date:'yyyy-MM-dd'" (focusout)="department.startDate=setDate(stdate.value)">
+      <label for="enddate" style="margin-left: 5px">End date</label>
+      <input #edate type="date" style="width: 170px; display: inline; margin-left: 5px; margin-right: 5px" class="form-control" id="enddate"  name="enddateinput" [ngModel]="department.endDate | date:'yyyy-MM-dd'" (focusout)="department.endDate=setDate(edate.value)">
+    </div>
+    <small *ngIf="department.endDate && department.startDate && department.endDate.getTime() < department.startDate.getTime()  && submitattempt" class="text-danger">End date must be after start date</small>
+    <small *ngIf="department.endDate && !department.startDate && submitattempt" class="text-danger">Define the start date</small>
+    <small *ngIf="department.startDate && !department.endDate && submitattempt" class="text-danger">Define the end date</small>
+    <div class="form-group" >
+      <label for="addr">Address</label>
+      <input type="text" class="form-control" id="addr" placeholder="Street Name, House Number, Zip, City" (focusout)="setAddress()" [(ngModel)]="department.address" name="addressinput" >
+    </div>
+    <div class="form-group" >
+      <label for="country">Country</label>
+      <input type="text" class="form-control" id="country" placeholder="Change enter country" [(ngModel)]="department.country" name="countryinput" >
+    </div>
+    <div id="dep_map" class="dep_map"></div>
+    <div class="form-group" style="margin-top: 10px; display: block">
+      <label for="transport" style="display: block">Transport details</label>
+      <textarea id="transport" name="transport" rows="3" cols="80" [(ngModel)]="department.transport"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="beds">Number of beds</label>
+      <div id="beds">
+        <button class="button-left" (click)="(department.numberOfBeds > 0) ? department.numberOfBeds=department.numberOfBeds - 1 : 0" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        {{department.numberOfBeds}}
+        <button class="marginleft button-right" (click)="department.numberOfBeds=department.numberOfBeds + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="bedrooms">Number of bedrooms</label>
+      <div id="bedrooms">
+        <button class="button-left" (click)="(department.numberOfBedrooms > 0) ? department.numberOfBedrooms=department.numberOfBedrooms - 1 : 0" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        {{department.numberOfBedrooms}}
+        <button class="marginleft button-right" (click)="department.numberOfBedrooms=department.numberOfBedrooms + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="baths">Number of baths</label>
+      <div id="baths">
+        <button class="button-left" (click)="(department.numberOfBaths > 0) ? department.numberOfBaths=department.numberOfBaths - 1 : 0" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        {{department.numberOfBaths}}
+        <button class="marginleft button-right" (click)="department.numberOfBaths=department.numberOfBaths + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="minBookingDays">Minimum booking days</label>
+      <div id="minBookingDays">
+        <button class="button-left" (click)="(department.minBookingDays > 1) ? department.minBookingDays=department.minBookingDays - 1 : 1" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        {{department.minBookingDays}}
+        <button class="marginleft button-right" (click)="department.minBookingDays=department.minBookingDays + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="maxPeople">Maximum number of people</label>
+      <div id="maxPeople">
+        <button class="button-left" (click)="(department.maxPeople > 1) ? department.maxPeople=department.maxPeople - 1 : 1" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        {{department.maxPeople}}
+        <button class="marginleft button-right" (click)="department.maxPeople=department.maxPeople + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 10px" class="form-group">
+      <label for="type">Select department type</label>
+      <select  style="background-color: white; color: black; border-color: black; border-width: thin;width: 160px;text-align: center" name="Type" id="type" class="form-control"  [(ngModel)]="department.type" >
+        <option [ngValue]="null" [disabled]="true" [hidden]="true" >Type</option>
+        <option value="apartment">Apartment</option>
+        <option value="publicRoom">Public Room</option>
+        <option value="privateRoom">Private Room</option>
+      </select>
+    </div>
+
+    <label for="dropdown" style="display: block">Extras</label>
+    <div id="dropdown" style="margin-bottom: 10px" ngbDropdown class="d-inline-block form-group">
+      <button style="background-color: white; color: black; border-color: black; border-width: thin;width: 160px" type="button" id="dropdownBasic1" ngbDropdownToggle>Properties</button>
+      <div style="background-color: white;max-height: 10vh;overflow-y:auto; " ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <div>
+          <input #internet id="internet" class="dropdowninput" type="checkbox" (change)="(internet.checked)? department.hasInternet = true : department.hasInternet = false" [checked]="department.hasInternet == true"><label for="internet" class="marginleft" >Internet</label>
+        </div>
+        <div>
+          <input #aircondition id="aircondition" class="dropdowninput" type="checkbox" (change)="(aircondition.checked)? department.hasAirCondition = true : department.hasAirCondition = false" [checked]="department.hasAirCondition == true" > <label for="aircondition" class="marginleft">Air-condition</label>
+        </div>
+        <div>
+          <input #tv id="tv"  class="dropdowninput"  type="checkbox" (change)="(tv.checked)? department.hasTv = true : department.hasTv = false" [checked]="department.hasTv == true"><label for="tv" class="marginleft">Tv</label>
+        </div>
+        <div>
+          <input #parking id="parking"  class="dropdowninput"  type="checkbox" (change)="(parking.checked)? department.hasParking = true : department.hasParking = false" [checked]="department.hasParking == true"><label for="parking" class="marginleft">Parking</label>
+        </div>
+        <div>
+          <input #livingroom id="livingroom"  class="dropdowninput"  type="checkbox" (change)="(livingroom.checked)? department.hasLivingRoom = true : department.hasLivingRoom = false" [checked]="department.hasLivingRoom == true"><label for="livingroom" class="marginleft">Living room</label>
+        </div>
+        <div>
+          <input #kitchen id="kitchen"  class="dropdowninput"  type="checkbox" (change)="(kitchen.checked)? department.hasKitchen = true : department.hasKitchen = false" [checked]="department.hasKitchen == true"><label for="kitchen" class="marginleft">Kitchen</label>
+        </div>
+        <div>
+          <input #heat id="heat"  class="dropdowninput"  type="checkbox" (change)="(heat.checked)? department.hasHeat = true : department.hasHeat = false" [checked]="department.hasHeat == true"><label for="heat" class="marginleft">Heat</label>
+        </div>
+        <div>
+          <input #elevator id="elevator"  class="dropdowninput"  type="checkbox" (change)="(elevator.checked)? department.hasElevator = true : department.hasElevator = false" [checked]="department.hasElevator == true"><label for="elevator" class="marginleft">Elevator</label>
+        </div>
+      </div>
+    </div>
+    <div style="margin-bottom: 10px" ngbDropdown class="d-inline-block form-group">
+      <button style="background-color: white; color: black; border-color: black; border-width: thin;width: 200px" type="button" id="dropdownBasic1" ngbDropdownToggle>Permissions</button>
+      <div style="background-color: white;max-height: 10vh;overflow-y:auto;width: 200px" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <div>
+          <input #smoking id="smoking" class="dropdowninput" type="checkbox" (change)="(smoking.checked)? department.smokingAllowed = true : department.smokingAllowed = false" [checked]="department.smokingAllowed == true"><label for="smoking" class="marginleft" >Smoking is allowed</label>
+        </div>
+        <div>
+          <input #pets id="pets" class="dropdowninput" type="checkbox" (change)="(pets.checked)? department.petsAllowed = true : department.petsAllowed = false" [checked]="department.petsAllowed == true"> <label for="pets" class="marginleft">Pets are allowed</label>
+        </div>
+        <div>
+          <input #events id="events"  class="dropdowninput"  type="checkbox" (change)="(events.checked)? department.eventsAllowed = true : department.eventsAllowed = false" [checked]="department.eventsAllowed == true"><label for="events" class="marginleft">Events are allowed</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group" style="margin-top: 10px; display: block">
+      <label for="description" style="display: block">Description</label>
+      <textarea id="description" name="description" rows="4" cols="80" [(ngModel)]="department.description"></textarea>
+    </div>
+    <div>
+      <button  [disabled]="loading" type="submit" class="btn btn-default">Submit</button>
+      <div  *ngIf="loading" class="spinner-border spinner-border-sm" role="status"></div>
+    </div>
+  </form>
+
+</div>
+

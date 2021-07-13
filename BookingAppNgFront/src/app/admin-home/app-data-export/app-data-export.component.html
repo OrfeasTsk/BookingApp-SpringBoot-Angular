@@ -1,0 +1,26 @@
+<div class="header">
+  <div id="department">
+    Info for departments:
+    <a #deparments style="display: none" ></a>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn" (click)="downloadDepartments('json',deparments)" > Download JSON</button>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn"  (click)="downloadDepartments('xml',deparments)" > Download XML</button>
+  </div>
+  <div id="booking">
+    Info for bookings:
+    <a #bookings style="display: none" ></a>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn" (click)="downloadBookings('json',bookings)" > Download JSON</button>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn"  (click)="downloadBookings('xml',bookings)" > Download XML</button>
+  </div>
+  <div id="depreview">
+    Info for department reviews:
+    <a #depreviews style="display: none" ></a>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn" (click)="downloadDepartmentReviews('json',depreviews)" > Download JSON</button>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn"  (click)="downloadDepartmentReviews('xml',depreviews)" > Download XML</button>
+  </div>
+  <div id="hostreview">
+    Info for host reviews:
+    <a #hostreviews style="display: none" ></a>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn" (click)="downloadHostReviews('json',hostreviews)" > Download JSON</button>
+    <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-left: 20px" type="button" style="background-color: green" class="cart-btn"  (click)="downloadHostReviews('xml',hostreviews)" > Download XML</button>
+  </div>
+</div>

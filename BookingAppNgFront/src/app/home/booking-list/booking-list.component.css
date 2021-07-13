@@ -1,0 +1,24 @@
+h1{
+  text-align: center; margin-bottom: 40px; margin-top: 20px; color: darkslateblue; display: block; font-weight: 350; font-style: oblique;
+  font-size: 30px;
+}
+
+
+button{
+  background-color: deepskyblue;
+  font-size: medium;
+  color: ghostwhite;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 5px 25px 5px 25px;
+  width: min-content;
+}
+
+.container{
+
+  border-style: solid;
+  width: 1000px;
+  margin-bottom: 10px;
+  overflow: hidden;
+
+}

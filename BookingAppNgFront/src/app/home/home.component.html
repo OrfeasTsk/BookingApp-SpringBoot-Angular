@@ -1,0 +1,135 @@
+<div *ngIf="submiterror && dangerBox" class="alert alert-danger" role="alert" style="margin-top: 50px; width: 50vw;position: relative;
+  margin-left : 25%;">
+  <small class="text-danger" >{{submiterror}}</small>
+  <button style="color: #ff0b00; background-color: transparent; position: absolute;
+  bottom: 30%;
+  left: 90%;
+  width: max-content; " type="button" class="close" aria-label="Close" (click)="dangerBox = false">
+    <span>&times;</span>
+  </button>
+</div>
+<form class="form-inline booking-form-box" name="form" #searchform="ngForm" (ngSubmit)="submit(searchform,inputElement)">
+     <div style="white-space:nowrap;display: inline;margin: 0 auto">
+        <label style="margin-top: 10px" >Place</label>
+       <input #inputElement type="text" list="loclist" class="form-control" placeholder="City or Country" name="place" [(ngModel)]="searchForm.place" (input)="autofill(inputElement.value)"  required #location="ngModel"
+              [class.is-invalid]="location.invalid && submitattempt">
+       <datalist id="loclist">
+         <option [value]="location" *ngFor="let location of locations">
+        </datalist>
+     </div>
+    <div style="white-space:nowrap;display: inline;margin: 0 auto">
+      <label style="margin-top: 10px"> Check In</label>
+      <input #stdate  type="date" class="form-control select-date" name="startDate" [class.is-invalid]="!searchForm.startDate && submitattempt" (focusout)="searchForm.startDate=setDate(stdate.value)" [valueAsDate]="searchForm.startDate" required>
+    </div>
+    <div style="white-space:nowrap;display: inline;margin: 0 auto">
+      <label style="margin-top: 10px"> Check Out</label>
+      <input #edate  type="date" class="form-control select-date" name="endDate" [class.is-invalid]="!searchForm.endDate && submitattempt" (focusout)="searchForm.endDate=setDate(edate.value) "  [valueAsDate]="searchForm.endDate" required>
+    </div>
+  <div style="white-space:nowrap;display: block;margin: 0 auto">
+    <div id="dropdown2"  style="padding-top: 45px; padding-left: 10px"  ngbDropdown class="form-group">
+      <button style="background-color: white; color: black; border-color: lightgrey; border-width: thin;width: 220px;height: 42px;border-radius: 8px" type="button" id="dropdownBasic2" ngbDropdownToggle>{{searchForm.numberOfAdults}} Adults · {{searchForm.numberOfChildren}} Children </button>
+      <div style="background-color: white;height: 100px; width: 200px; overflow-y:auto; " ngbDropdownMenu aria-labelledby="dropdownBasic2">
+        <div style="margin-top: 5px" class="dropdowninput">
+          <label for="adults" style="display: inline; margin-left: 9px; margin-right: 13px">Adults</label>
+          <div id="adults" style="display: inline">
+            <button class="button-left" (click)="(searchForm.numberOfAdults > 1) ? searchForm.numberOfAdults=searchForm.numberOfAdults - 1 : 1" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+            {{searchForm.numberOfAdults}}
+            <button  class="button-right" (click)="searchForm.numberOfAdults=searchForm.numberOfAdults + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+          </div>
+        </div>
+        <div style="margin-top: 15px" class="dropdowninput">
+          <label for="children" style="display: inline; margin-left: 8px">Children</label>
+          <div id="children" style="display: inline">
+            <button class="button-left" (click)="(searchForm.numberOfChildren > 0) ? searchForm.numberOfChildren=searchForm.numberOfChildren - 1 : 0" type="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+            {{searchForm.numberOfChildren}}
+            <button class="button-right" (click)="searchForm.numberOfChildren=searchForm.numberOfChildren + 1" type="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div style="white-space:nowrap;display: block; margin: 0 auto">
+    <button  [disabled]="loading"  type="submit" class="btn btn-default button-submit" style="height: 55px;"><i class="fa fa-search" aria-hidden="true"></i> Search <div   *ngIf="loading" class="spinner-border spinner-border-sm " role="status"></div></button>
+
+  </div>
+</form>
+
+
+
+
+<div class="grid-container">
+<form class="booking-form-box filters" style="border-radius: 6px;"  *ngIf="filters">
+  <h4 style="text-align: center;margin-top: 5%">Filters</h4>
+  <div style="white-space:nowrap;display: block" >
+  <label style="display: block; text-align: center; margin-top: 20%"><b>Cost</b></label>
+    <input style="width: 87px" type="number" placeholder="Min cost" min="0" step="0.01" name="minCost" [(ngModel)]="searchForm.minCost">
+    <input style="width: 87px" type="number" placeholder="Max cost" name="maxCost" [(ngModel)]="searchForm.maxCost">
+  </div>
+  <div style="white-space:nowrap;display: block; margin: auto" >
+    <div style="margin-top: 40%" id="dropdown" ngbDropdown class="form-group">
+      <button style="background-color: white; color: black; border-color: black; border-width: thin;width: 200px;height: 38px;border-radius: 5px" type="button" id="dropdownBasic1" ngbDropdownToggle>Properties</button>
+      <div style="background-color: white;height: 100px; width: 200px; overflow-y:auto; " ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <div>
+          <input #internet id="internet" class="dropdowninput" type="checkbox" (change)="(internet.checked)? searchForm.hasInternet = true : searchForm.hasInternet = null"  [checked]="searchForm.hasInternet == true" ><label for="internet" class="checkboxlabel" >Internet</label>
+        </div>
+        <div>
+          <input #aircondition id="aircondition" class="dropdowninput" type="checkbox" (change)="(aircondition.checked)? searchForm.hasAirCondition = true : searchForm.hasAirCondition = null" [checked]="searchForm.hasAirCondition == true"> <label for="aircondition" class="checkboxlabel">Air-condition</label>
+        </div>
+        <div>
+          <input #tv id="tv"  class="dropdowninput"  type="checkbox" (change)="(tv.checked)? searchForm.hasTv = true : searchForm.hasTv = null"  [checked]="searchForm.hasTv == true"><label for="tv" class="checkboxlabel">Tv</label>
+        </div>
+        <div>
+          <input #parking id="parking"  class="dropdowninput"  type="checkbox" (change)="(parking.checked)? searchForm.hasParking = true : searchForm.hasParking = null"  [checked]="searchForm.hasParking == true"><label for="parking" class="checkboxlabel">Parking</label>
+        </div>
+        <div>
+          <input #livingroom id="livingroom"  class="dropdowninput"  type="checkbox" (change)="(livingroom.checked)? searchForm.hasLivingRoom = true : searchForm.hasLivingRoom = null"  [checked]="searchForm.hasLivingRoom == true"><label for="livingroom" class="checkboxlabel">Living room</label>
+        </div>
+        <div>
+          <input #kitchen id="kitchen"  class="dropdowninput"  type="checkbox" (change)="(kitchen.checked)? searchForm.hasKitchen = true : searchForm.hasKitchen = null"  [checked]="searchForm.hasKitchen == true"><label for="kitchen" class="checkboxlabel">Kitchen</label>
+        </div>
+        <div>
+          <input #heat id="heat"  class="dropdowninput"  type="checkbox" (change)="(heat.checked)? searchForm.hasHeat = true : searchForm.hasHeat = null"  [checked]="searchForm.hasHeat == true"><label for="heat" class="checkboxlabel">Heat</label>
+        </div>
+        <div>
+          <input #elevator id="elevator"  class="dropdowninput"  type="checkbox" (change)="(elevator.checked)? searchForm.hasElevator = true : searchForm.hasElevator = null"  [checked]="searchForm.hasElevator == true"><label for="elevator" class="checkboxlabel">Elevator</label>
+        </div>
+        <div>
+          <input #smoking id="smoking" class="dropdowninput" type="checkbox" (change)="(smoking.checked)? searchForm.smokingAllowed = true : searchForm.smokingAllowed = null"  [checked]="searchForm.smokingAllowed == true"><label for="smoking" class="checkboxlabel" >Smoking is allowed</label>
+        </div>
+        <div>
+          <input #pets id="pets" class="dropdowninput" type="checkbox" (change)="(pets.checked)? searchForm.petsAllowed = true : searchForm.petsAllowed = null"  [checked]="searchForm.petsAllowed == true"> <label for="pets" class="checkboxlabel">Pets are allowed</label>
+        </div>
+        <div>
+          <input #events id="events"  class="dropdowninput"  type="checkbox" (change)="(events.checked)? searchForm.eventsAllowed = true : searchForm.eventsAllowed = null"  [checked]="searchForm.eventsAllowed == true"><label for="events" class="checkboxlabel">Events are allowed</label>
+        </div>
+      </div>
+    </div>
+    <div style="white-space:nowrap;display: block" >
+      <select #type="ngModel" style="background-color: white; color: black; border-color: black; border-width: thin;width: 95%;text-align: center; display:block; margin-top: 40%" name="Type" id="type" class="form-control" required [(ngModel)]="searchForm.roomType" >
+        <option  [ngValue]="null" [disabled]="true" [hidden]="true" >Type</option>
+        <option value="apartment">Apartment</option>
+        <option value="publicRoom">Public Room</option>
+        <option value="privateRoom">Private Room</option>
+      </select>
+    </div>
+
+
+
+  </div>
+</form>
+
+  <div class="departments">
+    <app-department-search [departments]="departments"  [searchForm]="searchFormCopy" ></app-department-search>
+  </div>
+
+  <div class="recommendations" *ngIf="recommended && recommended.length > 0">
+    <h5 style="text-align: center ;margin: 20px 0 40px 0;font-weight: normal;font-family: Arial">Recommended for you</h5>
+    <div *ngFor="let department of recommended" style="margin-bottom: 10px">
+      <div><a [routerLink]="['/departments/',department.id.toString()]" >{{department.name}}</a></div>
+    </div>
+
+</div>
+
+

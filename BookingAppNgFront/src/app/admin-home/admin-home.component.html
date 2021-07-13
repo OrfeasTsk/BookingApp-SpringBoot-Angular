@@ -1,0 +1,13 @@
+<div id="users">
+  <h1>List of users:</h1>
+  <div class="list-group"  *ngFor="let user of users  | paginate: { id: 'userlist',
+                                                      itemsPerPage: 10,
+                                                      currentPage: page,
+                                                      totalItems: users.length }">
+
+    <a class="list-group-item list-group-item-action list-group-item-primary" > <span class="float-left" style="margin-top: 8px">{{user.username}}</span><button [routerLink]="['/users/',user.id]" type="button" class="btn btn-default float-right">Show details</button></a>
+
+  </div>
+  <pagination-controls *ngIf="users && users.length > 10"  style="position: relative"  id="userlist" (pageChange)="page = $event"></pagination-controls>
+</div>
+

@@ -1,0 +1,30 @@
+<div style="margin-top: 10vh; width: 40%;
+  margin-left : 30%;">
+  <div *ngIf="loginerror && dangerBox" class="alert alert-danger" role="alert">
+  <small class="text-danger" >{{loginerror.error.message}}{{loginmsg}}</small>
+    <button style="color: #ff0b00; background-color: transparent" type="button" class="close" aria-label="Close" (click)="dangerBox = false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <form name="form" #loginform="ngForm" (ngSubmit)="login(loginform)">
+    <h2 style="text-align: center">Login</h2>
+    <div class="form-group">
+      <label for="username"><span>Username </span><span class="text-danger" >*</span></label>
+      <input type="text" class="form-control" id="username" placeholder="Enter username" [(ngModel)]="model.username" name="usernameinput" required #username="ngModel"
+       [class.is-invalid]="username.invalid && submitattempt">
+      <small *ngIf="username.invalid && submitattempt" class="text-danger">Username is required field</small>
+    </div>
+    <div class="form-group" >
+      <label for="pwd"><span>Password </span><span class="text-danger" >*</span></label>
+      <input type="password" class="form-control" id="pwd" placeholder="Enter password" [(ngModel)]="model.password" name="passwordinput" required #password="ngModel"
+             [class.is-invalid]="password.invalid && submitattempt">
+      <small *ngIf="password.invalid && submitattempt" class="text-danger">Password is required field</small>
+    </div>
+    <div>
+      <button  [disabled]="loading" type="submit" class="btn btn-default">Login</button>
+      <div  *ngIf="loading" class="spinner-border spinner-border-sm" role="status"></div>
+    </div>
+    <div class="float-right" style="font-size: 13px">Don’t have an account? <a routerLink="/signup">Sign up</a></div>
+  </form>
+</div>
+

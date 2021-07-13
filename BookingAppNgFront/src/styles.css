@@ -1,0 +1,20 @@
+/* You can add global styles to this file, and also import other style files */
+
+form{
+
+  background-color: whitesmoke;
+  padding: 15px 60px 30px 50px;
+  box-shadow: 2px 2px 7px 7px lightgrey;
+  overflow: auto;
+
+
+}
+
+pagination-controls{
+
+  width: 100%;
+  text-align: center;
+
+
+}
+

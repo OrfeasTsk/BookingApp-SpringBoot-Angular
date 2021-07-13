@@ -1,0 +1,86 @@
+<div style="margin-top: 10vh; width: 40%;
+  margin-left : 30%;">
+  <div *ngIf="signuperror && dangerBox" class="alert alert-danger" role="alert">
+    <small class="text-danger" >{{signuperror.error.message}}</small>
+    <button style="color: #ff0b00; background-color: transparent" type="button" class="close" aria-label="Close" (click)="dangerBox = false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <form name="form" #signupform="ngForm" (ngSubmit)="signup(signupform)">
+    <h2 style="text-align: center">Signup</h2>
+    <div class="form-group">
+      <label for="firstname" ><span>First Name </span><span class="text-danger" >*</span></label>
+      <input type="text" class="form-control" id="firstname" placeholder="Enter first name" [(ngModel)]="user.firstName" name="firstnameinput" required #firstname="ngModel"
+             [class.is-invalid]="firstname.invalid && submitattempt">
+      <small *ngIf="firstname.invalid && submitattempt" class="text-danger">First name is required field</small>
+    </div>
+    <div class="form-group">
+      <label for="lastname" ><span>Last Name </span><span class="text-danger" >*</span></label>
+      <input type="text" class="form-control" id="lastname" placeholder="Enter last name" [(ngModel)]="user.lastName" name="lastnameinput" required #lastname="ngModel"
+             [class.is-invalid]="lastname.invalid && submitattempt">
+      <small *ngIf="lastname.invalid && submitattempt" class="text-danger">Last name is required field</small>
+    </div>
+    <div class="form-group">
+      <label for="username"><span>Username </span><span class="text-danger" >*</span></label>
+      <input type="text" class="form-control" id="username" placeholder="Enter username" [(ngModel)]="user.username" name="usernameinput" required #username="ngModel"
+             [class.is-invalid]="username.invalid && submitattempt">
+      <small *ngIf="username.invalid && submitattempt" class="text-danger">Username is required field</small>
+    </div>
+    <div class="form-group">
+      <label for="email"><span>Email </span><span class="text-danger" >*</span></label>
+      <input type="email" class="form-control" id="email" placeholder="Enter email" [(ngModel)]="user.email" name="emailinput" required #email="ngModel" pattern="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|&quot(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"
+             [class.is-invalid]="email.invalid && submitattempt">
+      <div *ngIf="email.invalid && submitattempt">
+        <small *ngIf="email.errors.required" class="text-danger">Email is required field</small>
+        <small *ngIf="email.errors.pattern" class="text-danger">Invalid email address</small>
+      </div>
+      </div>
+    <div class="form-group" >
+      <label for="pwd"><span>Password </span><span class="text-danger" >*</span></label>
+      <input type="password" class="form-control" id="pwd" placeholder="Enter password" [(ngModel)]="user.password" name="passwordinput" required #password="ngModel"
+             [class.is-invalid]="password.invalid && submitattempt">
+      <small *ngIf="password.invalid && submitattempt" class="text-danger">Password is required field</small>
+    </div>
+    <div class="form-group" >
+      <label for="pwdconf">Confirm Password</label>
+      <input type="password" class="form-control" id="pwdconf" placeholder="Enter password confirm" [(ngModel)]="user.passwordConfirm" name="passwordconfirminput" required #passwordconf="ngModel"
+             [class.is-invalid]="submitattempt && (user.passwordConfirm || user.password) && user.password !== user.passwordConfirm">
+      <small *ngIf="submitattempt && (user.passwordConfirm || user.password) && user.password !== user.passwordConfirm" class="text-danger">Passwords do not match</small>
+
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input type="phone" class="form-control" id="phone" placeholder="Enter phone" [(ngModel)]="user.phone" name="phoneinput">
+    </div>
+    <fieldset>
+      <legend style="font-size: medium">Select your role(s)</legend>
+      <small *ngIf="submitattempt && tenant.checked == false && host.checked == false" class="text-danger">Select at least one role</small>
+      <div class="form-check">
+        <input #tenant class="form-check-input" type="checkbox" name="role_tenant" value="ROLE_TENANT" id="role_tenant" (change)="onTenantCheckBoxChange(tenant)" >
+        <label class="form-check-label" for="role_tenant">
+          Tenant
+        </label>
+      </div>
+      <div class="form-check">
+        <input #host class="form-check-input" type="checkbox" name="role_host" value="ROLE_HOST" id="role_host" (change)="onHostCheckBoxChange(host)">
+        <label class="form-check-label" for="role_host">
+          Host
+        </label>
+      </div>
+    </fieldset>
+    <div class="form-group" style="margin-top: 10px; display: block">
+      <label for="profilephoto" style="display: block"><span>Profile photo </span> <span class="text-danger" >*</span></label>
+      <input #profilephoto id="profilephoto" type="file" accept=".jpg,.jpeg,.png" style="display: block" (change)="setProfilePhoto(profilephoto)" >
+      <small *ngIf="profilePhoto && (profilePhoto.type !='image/jpeg' && profilePhoto.type !='image/png') && submitattempt " class="text-danger">Image file must be jpeg or png</small>
+      <small *ngIf="!profilePhoto && submitattempt" class="text-danger">Please choose profile photo</small>
+    </div>
+    <div>
+      <button  [disabled]="loading" type="submit" class="btn btn-default">Submit</button>
+      <div  *ngIf="loading" class="spinner-border spinner-border-sm" role="status"></div>
+    </div>
+
+
+    <div class="float-right" style="font-size: 13px">Already have an account? <a routerLink="/login">Log in</a></div>
+  </form>
+</div>
+

@@ -1,0 +1,18 @@
+.header {
+  padding: 30px;
+  text-align: center;
+  font-size: 20px;
+  margin: 0 auto;
+}
+
+button {
+  display: inline-block;
+  background-color: #7DC855;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #FFFFFF;
+  text-decoration: none;
+  padding: 12px 25px;
+  margin: 10px;
+  text-align: center;
+}

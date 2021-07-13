@@ -1,0 +1,13 @@
+.message{
+  -webkit-box-shadow: 0 0 10px cornflowerblue;
+  box-shadow: 0 0 15px cornflowerblue;
+  border-style: solid;
+  border-color: royalblue;
+  border-width: 0.5px 0.5px 0.5px 0.5px;
+  margin: 0 auto 20px auto;
+  overflow: hidden;
+  width: 600px;
+  height: max-content;
+  padding: 10px 30px 30px 40px;
+  border-radius: 10px;
+}

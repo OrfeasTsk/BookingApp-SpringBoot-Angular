@@ -1,0 +1,98 @@
+.booking-form-box
+{
+  max-width: 70vw;
+  border: 1px solid #ced4da;
+  margin: 50px auto 0;
+  background-color: dodgerblue;
+  padding: 30px ;
+  overflow:visible;
+
+}
+
+.booking-form-box input{
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+button{
+  background-color: deepskyblue;
+  font-size: medium;
+  color: ghostwhite;
+
+}
+
+button:hover{
+
+  background-color: lightskyblue;
+
+}
+
+.button-submit{
+  margin-left: 10px;
+  margin-top: 30px;
+  height: 45px;
+  width: 300px;
+  border-radius: 10px;
+}
+
+.button-left{
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  margin-right: 3px;
+  border-radius: 20px;
+}
+
+.button-right{
+  width: 30px;
+  height: 30px;
+  border-radius: 20px;
+  margin-left: 3px;
+}
+
+
+.checkboxlabel{
+  display: inline;
+  margin-left: 5px;
+
+}
+
+.grid-container{
+  display: grid;
+  grid-template-areas:
+    'filters departments'
+    ' rec  .';
+  grid-gap: 10px;
+  grid-template-columns: 300px 1fr;
+  margin-top: 30px;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+.filters{
+  grid-area: filters;
+  background-color: powderblue;
+  height: max-content;
+  margin-left: 30px;
+  box-shadow: none ;
+
+}
+
+
+.departments{
+  grid-area: departments;
+}
+
+.recommendations{
+  grid-area: rec;
+  margin-left: 30px;
+  width: 220px;
+  height: max-content;
+  text-align: center;
+  border-radius: 4px;
+  background-color: whitesmoke;
+  box-shadow: 0 0 15px gray;
+
+}

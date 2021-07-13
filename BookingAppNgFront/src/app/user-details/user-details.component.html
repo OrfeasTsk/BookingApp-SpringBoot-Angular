@@ -1,0 +1,29 @@
+<div class="card" style="width: 30rem; margin: 100px auto;">
+  <div>
+    <img (click)="newTab(user.profilePhoto)" [class.op]="changeButton" width="300px" height="250px"  style="display: block;margin: 20px auto" [src]="displayProfilePhoto()">
+    <input #profphoto  id="file" type="file"  accept=".jpg,.jpeg,.png" (change)="changeProfilePhoto(profphoto)">
+    <a *ngIf="user.id && userDetails && userDetails.id == user.id" (mouseover)="changeButton = true" (mouseout)="changeButton = false" class="button" type="button"><label for="file" style="border-radius: 6px;width: max-content" class="btn btn-success">Change <i class="fa fa-pencil" aria-hidden="true"></i></label></a>
+    <div *ngIf="!validprofphoto"><small class="text-danger">Image file must be jpeg or png</small></div>
+  </div>
+
+  <div class="card-body">
+    <h5 class="card-title">{{user.username}}</h5>
+    <p class="card-text">{{user.firstName}} {{user.lastName}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+
+    <li class="list-group-item" >Role: {{getRoles()}}</li>
+    <li class="list-group-item">Email: {{user.email}}</li>
+    <li class="list-group-item">Phone: {{user.phone}}</li>
+  </ul>
+  <div class="card-body">
+    <a *ngIf="user.id && userDetails && userDetails.id == user.id" class="float-left" [routerLink]="'/users/'+ user.id.toString() +'/edit'">Edit Profile</a>
+    <a *ngIf="user.id && userDetails && userDetails.id == user.id" class="float-right" [routerLink]="'/users/'+ user.id.toString() +'/passwordchange'">Change password</a>
+    <div *ngIf="hasRole('ROLE_ADMIN')">
+      <button *ngIf="userHasRole('ROLE_HOST') && !user.accepted" type="submit" class="btn btn-default" (click)="accepthost()">Press here to approve Host</button>
+      <div *ngIf="userHasRole('ROLE_HOST') && user.accepted "><span>  Host Accepted &#10003; </span></div>
+    </div>
+
+  </div>
+</div>
+

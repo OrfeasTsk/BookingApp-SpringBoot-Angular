@@ -1,0 +1,22 @@
+<h1 for="departments">Your departments</h1>
+<div id="departments" >
+  <div class="grid-container"  *ngFor="let department of departments  | paginate: { id: 'deplist',
+                                                      itemsPerPage: 5,
+                                                      currentPage: page,
+                                                      totalItems: departments.length }">
+      <div class="photo">
+        <img *ngIf="department.mainPhoto" height="250px" width="400px" [src]="displayMainPhoto(department)">
+      </div>
+    <div class="name"><a [routerLink]="['/departments/',department.id.toString()]">{{department.name| titlecase}}</a></div>
+      <div class="cost">{{department.costPerDay}} €</div>
+      <div style="position:relative;bottom: 28%; font-size: 33px" class="reviews">
+        <i style="color: gold; font-size: 28px" class="fa fa-star" aria-hidden="true"></i> <small> {{department.averageRating.toFixed(1) }}<span style="color: lightgrey;font-size: 20px">/5 </span> </small>
+        <small style="display: block;font-size:small ">Total reviews: {{department.numberOfReviews}}</small>
+      </div>
+    <div class="type"><small style="font-size: 20px"><i class="fa fa-bed" aria-hidden="true"></i> {{department.numberOfBeds}}<br><i class="fa fa-building" aria-hidden="true"></i> {{Type(department) | lowercase}}</small></div>
+      <div class="link"><button [routerLink]="['/departments/',department.id.toString()]" type="button" class="btn btn-default" style="width:max-content">Show details</button></div>
+  </div>
+  <pagination-controls  *ngIf="departments && departments.length > 5"  id="deplist" (pageChange)="page = $event"></pagination-controls>
+</div>
+
+

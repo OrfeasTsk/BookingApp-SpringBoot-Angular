@@ -1,0 +1,47 @@
+<div style="margin-top: 10vh; width: 40%;
+  margin-left : 30%;">
+  <div *ngIf="submiterror && dangerBox" class="alert alert-danger" role="alert">
+    <small class="text-danger" >{{submiterror.error.message}}</small>
+    <button style="color: #ff0b00; background-color: transparent" type="button" class="close" aria-label="Close" (click)="dangerBox = false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <div *ngIf="submitmsg && successBox" class="alert alert-success" role="alert">
+    <small class="text-success" >{{submitmsg}}</small>
+    <button style="color: green; background-color: transparent" type="button" class="close" aria-label="Close" (click)="successBox = false">
+      <span>&times;</span>
+    </button>
+  </div>
+  <form name="form" #usereditform="ngForm" (ngSubmit)="submit(usereditform)">
+    <h2 style="text-align: center">Edit Profile</h2>
+    <div class="form-group">
+      <label for="firstname" >First Name</label>
+      <input type="text" class="form-control" id="firstname" placeholder="Change first name" [(ngModel)]="user.firstName" name="firstnameinput">
+    </div>
+    <div class="form-group">
+      <label for="lastname" >Last Name</label>
+      <input type="text" class="form-control" id="lastname" placeholder="Change last name" [(ngModel)]="user.lastName" name="lastnameinput">
+    </div>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" class="form-control" id="username" placeholder="Change username" [(ngModel)]="user.username" name="usernameinput">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" class="form-control" id="email" placeholder="Change email" [(ngModel)]="user.email" name="emailinput" #email="ngModel" pattern="(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|&quot(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*&quot)@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])"
+             [class.is-invalid]="email.invalid && submitattempt">
+      <div *ngIf="email.invalid && submitattempt">
+        <small *ngIf="email.errors.pattern" class="text-danger">Invalid email address</small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input type="phone" class="form-control" id="phone" placeholder="Change phone" [(ngModel)]="user.phone" name="phoneinput">
+    </div>
+    <div>
+      <button  [disabled]="loading" type="submit" class="btn btn-default">Submit</button>
+      <div  *ngIf="loading" class="spinner-border spinner-border-sm" role="status"></div>
+    </div>
+  </form>
+</div>
+

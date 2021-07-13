@@ -1,0 +1,24 @@
+a {
+  text-decoration: none;
+}
+
+button{
+
+  margin: 5px 20px 0 0;
+  background-color: skyblue;
+  color: whitesmoke;
+  border-width: 2px;
+  border-color: transparent;
+  font-size: medium;
+}
+
+
+header {
+  background-color: skyblue;
+
+}
+
+h1 {
+  margin-left : 42vw;
+
+}

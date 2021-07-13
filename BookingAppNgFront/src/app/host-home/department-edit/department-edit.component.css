@@ -1,0 +1,32 @@
+button{
+  background-color: deepskyblue;
+  font-size: medium;
+  color: ghostwhite;
+  margin-right: 10px;
+
+}
+
+
+h2{
+  margin-bottom: 30px;
+}
+
+.dropdowninput{
+  background-color: white;
+  color: black;
+  margin-left: 5px;
+}
+
+.marginleft{
+  margin-left: 10px;
+}
+
+.button-right{
+  border-radius: 15px;
+}
+
+.button-left{
+  border-radius: 15px;
+}
+
+.dep_map { height: 500px; width: 600px; }

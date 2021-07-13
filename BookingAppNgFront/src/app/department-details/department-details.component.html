@@ -1,0 +1,291 @@
+
+
+<div class="grid-container">
+  <div class="photo">
+    <img (click)="newTab(department.mainPhoto)" [class.op]="changeButton"  *ngIf="department.mainPhoto" height="350px" width="550px" [src]="displayPhoto(department.mainPhoto)">
+    <input *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id" #mainphoto  id="file2" type="file"  accept=".jpg,.jpeg,.png" (change)="changeMainPhoto(mainphoto)">
+    <a *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id"  (mouseover)="changeButton = true" (mouseout)="changeButton = false" class="button" type="button"><label for="file2" style="border-radius: 6px;width: max-content" class="btn btn-success">Change <i class="fa fa-pencil" aria-hidden="true"></i></label></a>
+    <div *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id && !validmainphoto"><small class="text-danger">Image file must be jpeg or png</small></div>
+  </div>
+
+  <div class="photos">
+    <ngb-carousel  >
+      <ng-template ngbSlide *ngFor="let photo of department.photos">
+        <div class="picsum-img-wrapper">
+          <img (click)="newTab(photo)" [class.op]="deleteButton" width="1300px" height="700px" [src]="displayPhoto(photo)" >
+          <button *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id" (click)="deletePhoto(photo.id)" (mouseover)="deleteButton = true" (mouseout)="deleteButton = false"  class="button btn btn-danger" type="button">Delete <i class="fa fa-trash-o" aria-hidden="true"></i></button>
+        </div>
+        <div class="carousel-caption">
+          <h3 >More Photos</h3>
+        </div>
+      </ng-template>
+    </ngb-carousel>
+  </div>
+
+  <div class="dep_map">
+    {{department.address}} {{department.country}}
+    <div id="dep_map" class="dep_map"></div>
+
+  </div>
+
+  <!-- Right Column -->
+  <div class="details">
+    <div *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id" style="float: right;margin-right: 100px">
+      <input #photos id="file1" type="file"  accept=".jpg,.jpeg,.png" multiple (change)="addPhotos(photos)">
+      <label for="file1">
+        <a class="btn addphoto-btn">Add photos <i class="fa fa-camera" aria-hidden="true"></i></a>
+      </label>
+
+    </div>
+
+    <div style="float: left"  >
+      <a *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id " [routerLink]="'/hostpage/departments/'+department.id.toString() +'/edit'" class="cart-btn">Edit Department <i class="fa fa-pencil" aria-hidden="true"></i></a>
+      <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-right: 20px" *ngIf="userDetails && hasRole('ROLE_TENANT') && department.host.id != userDetails.id " class="cart-btn"  (click)="reviewDepModalRef = bsModalService.show(reviewDepModal)">Review</button>
+
+      <button style="border-style: hidden" *ngIf="userDetails && hasRole('ROLE_TENANT') && department.host.id != userDetails.id && flag && !booked" class="cart-btn" [class.buttondisabled]="!params.startDate || !params.endDate ||( !params.numberOfChildren && !params.numberOfAdults)" [disabled]="!params.startDate || !params.endDate ||( !params.numberOfChildren && !params.numberOfAdults)" (click)="bookModalRef = bsModalService.show(bookModal)">Book now <i style="margin-left: 5px" class="fa fa-calendar-check-o" aria-hidden="true"></i></button>
+
+
+    </div>
+
+    <div *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id " style="clear: both">
+      <small *ngIf=" !validphotos " class="text-danger" >Image files must be jpeg or png</small>
+    </div>
+
+    <div class="description">
+        <h1 style="display: block">{{department.name}}</h1>
+      <div class="price">
+        <span>Cost per day: <b *ngIf="flag">{{findCost() }} €</b></span>
+        <span *ngIf="userDetails && hasRole('ROLE_HOST') && department.host.id == userDetails.id" style="font-size: 20px; color: green"> + {{department.costPerPerson}} € per Person </span>
+      </div>
+      <p>{{department.description}}</p>
+      <div style="position:relative;bottom: 28%; font-size: 33px" class="reviews">
+        <i style="color: gold; font-size: 28px" class="fa fa-star" aria-hidden="true"></i> <small> {{department.averageRating.toFixed(1) }}<span style="color: lightgrey;font-size: 20px">/5 </span> </small>
+        <small style="display: block;font-size:small ">Total reviews: {{department.numberOfReviews}}</small>
+      </div>
+    </div>
+
+    <p><b>Department basic characteristics </b></p>
+
+    <div class="characteristics">
+      Department type: {{ Type()}}
+    </div>
+    <div class="characteristics">
+      <span>Area: {{ department.area}} </span> <span>m<sup>2</sup> </span>
+    </div>
+    <div class="characteristics">
+      Maximum number of people: {{ department.maxPeople}}
+    </div>
+    <div class="characteristics">
+      Minimun number of booking days: {{ department.minBookingDays}}
+    </div>
+    <div class="characteristics">
+      Number of bedrooms: {{ department.numberOfBedrooms}}
+    </div>
+    <div class="characteristics">
+      Number of beds: {{ department.numberOfBeds}}
+    </div>
+    <div class="characteristics">
+        Number of bathrooms: {{ department.numberOfBaths}}
+    </div>
+
+    <div class="characteristics">
+      Number of reviews: {{ department.numberOfReviews}}
+    </div>
+
+    <div class="characteristics">
+      Availability: {{ getDate(department.startDate)}} -> {{getDate(department.endDate)}}
+    </div>
+
+    <details open>
+      <summary><b>Department Properties</b></summary>
+      <ul>
+        <li>Internet<span *ngIf="department.hasInternet">&#10003;</span><span *ngIf="!department.hasInternet">&#10007;</span></li>
+        <li>AirCondition<span *ngIf="department.hasAirCondition"> &#10003;</span><span *ngIf="!department.hasAirCondition">&#10007;</span></li>
+        <li>Heat<span *ngIf="department.hasHeat"> &#10003;</span><span *ngIf="!department.hasHeat">&#10007;</span></li>
+        <li>Kitchen<span *ngIf="department.hasKitchen"> &#10003;</span><span *ngIf="!department.hasKitchen">&#10007;</span></li>
+        <li>Tv<span *ngIf="department.hasTv"> &#10003;</span><span *ngIf="!department.hasTv">&#10007;</span></li>
+        <li>Parking<span *ngIf="department.hasParking"> &#10003;</span><span *ngIf="!department.hasParking">&#10007;</span></li>
+        <li>Elevator<span *ngIf="department.hasElevator"> &#10003;</span><span *ngIf="!department.hasElevator">&#10007;</span></li>
+        <li>LivingRoom<span *ngIf="department.hasLivingRoom"> &#10003;</span><span *ngIf="!department.hasLivingRoom">&#10007;</span></li>
+        <li>Smoking<span *ngIf="department.smokingAllowed"> &#10003;</span><span *ngIf="!department.smokingAllowed">&#10007;</span></li>
+        <li>Pets<span *ngIf="department.petsAllowed"> &#10003;</span><span *ngIf="!department.petsAllowed">&#10007;</span></li>
+        <li>Events allowed<span *ngIf="department.eventsAllowed">&#10003;</span><span *ngIf="!department.eventsAllowed">&#10007;</span></li>
+      </ul>
+    </details>
+    <div *ngIf="department.transport" >
+      <b> Transport details</b>
+    </div>
+    <div style="word-wrap: break-word; width: 300px" *ngIf="department.transport" class="characteristics">
+      {{department.transport}}
+    </div>
+
+
+  </div>
+
+  <div class="r"></div>
+
+
+  <div class="reviews" >
+    <h3 *ngIf="department.reviews.length > 0" style="margin-bottom: 20px" class="text-center"> Reviews</h3>
+    <h3 *ngIf="department.reviews.length == 0" style="margin-bottom: 20px" class="text-center">No reviews available yet</h3>
+    <div class= "review" *ngFor="let review of department.reviews  | paginate: { id: 'revlist',
+      itemsPerPage: 5,
+      currentPage: reviewPage,
+      totalItems: department.reviews.length }">
+      <div style=" font-size:20px ;float: right" class="rev-stars">
+        <span  [class.colored]="review.stars >= 1 " class="fa fa-star fa-xs" aria-hidden="true"></span>
+        <span [class.colored]="review.stars >= 2 " class="fa fa-star fa-xs" aria-hidden="true"></span>
+        <span [class.colored]="review.stars >= 3 " class="fa fa-star fa-xs" aria-hidden="true"></span>
+        <span [class.colored]="review.stars >= 4 " class="fa fa-star fa-xs" aria-hidden="true"></span>
+        <span [class.colored]="review.stars == 5 " class="fa fa-star fa-xs" aria-hidden="true"></span>
+      </div>
+      <div  style="padding-left: 100px" class="text-center"><a [routerLink]="['/users/',review.fromUser.id.toString()]">{{review.fromUser.firstName| titlecase}} {{review.fromUser.lastName| titlecase}}</a></div>
+      <div style="clear: both" class="text-center">
+        {{review.text}}
+      </div>
+    </div>
+    <pagination-controls *ngIf="department.reviews && department.reviews.length > 5" style="position: relative; right: 20px"   id="revlist" (pageChange)="reviewPage = $event"></pagination-controls>
+  </div>
+
+
+
+  <h3 style="margin-top: 50px" class="text-center profile">Host Details And Reviews</h3>
+  <div class="card profile" style=" margin: 20px auto; display: block">
+
+    <div>
+      <img (click)="department.host.profilePhoto"  width="300px" height="250px"   [src]="displayPhoto(department.host.profilePhoto)">
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title">{{department.host.username}}</h5>
+      <p class="card-text">{{department.host.firstName}} {{department.host.lastName}}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+
+      <li class="list-group-item">Email: {{department.host.email}}</li>
+      <li *ngIf="department.host.phone" class="list-group-item">Phone: {{department.host.phone}}</li>
+    </ul>
+    <div class="card-body">
+      <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-right: 20px" *ngIf="userDetails && hasRole('ROLE_TENANT') && department.host.id != userDetails.id " class="cart-btn"  (click)="messageHostModalRef = bsModalService.show(messageHostModal)">Ask host</button>
+      <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-right: 20px" *ngIf="userDetails && hasRole('ROLE_TENANT') && department.host.id != userDetails.id " class="cart-btn"  (click)="reviewHostModalRef = bsModalService.show(reviewHostModal)">Review host</button>
+      <button style="border-style: hidden; width: 150px; word-wrap: break-word; margin-right: 20px; display: block; margin: 10px auto" *ngIf="userDetails && (hasRole('ROLE_TENANT') || hasRole('ROLE_HOST')) " class="cart-btn"  [routerLink]="'/users/'+ userDetails.id + '/messages'" [queryParams]="{depId: department.id}" >View messages</button>
+    </div>
+    </div>
+  <div class="host-reviews" >
+    <h5 *ngIf="department.host.reviewsFromUsers.length == 0" style="margin-bottom: 20px" class="text-center">No reviews for host available</h5>
+    <div class="review" style="width: 400px" *ngFor="let review of department.host.reviewsFromUsers  | paginate: { id: 'hostrevlist',
+      itemsPerPage: 3,
+      currentPage: hostReviewPage,
+      totalItems: department.host.reviewsFromUsers.length }">
+      <div  class="text-center"><a [routerLink]="['/users/',review.fromUser.id.toString()]">{{review.fromUser.firstName| titlecase}} {{review.fromUser.lastName| titlecase}}</a></div>
+      <div class="text-center">
+        {{review.text}}
+      </div>
+    </div>
+    <pagination-controls *ngIf="department.host.reviewsFromUsers && department.host.reviewsFromUsers.length > 3" style="position: relative; right: 20px"   id="hostrevlist" (pageChange)="hostReviewPage = $event"></pagination-controls>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+<ng-template #templateRef1>
+  <div class="modal-header">
+    <h5 class="modal-title">Confirm your booking</h5>
+    <button type="button" class="close"  aria-label="Close" (click)="bookModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <div style="margin-bottom: 10px ">
+     <span ><b> Department name: </b></span>
+      <span>{{department.name}}</span>
+    </div>
+    <div style="margin-bottom: 10px ">
+      <span ><b>Adults: </b></span>
+      {{params.numberOfAdults}}
+    </div>
+    <div style="margin-bottom: 10px ">
+      <span ><b>Children: </b> </span>
+      {{params.numberOfChildren}}
+    </div>
+    <div style="margin-bottom: 10px ">
+      <span><b>Daily cost:</b></span>
+      {{findCost()}} €
+    </div>
+    <div>
+      <label style="margin-right: 35px" for="check-in"><b>Check In</b></label>
+      <label style="margin-left: 45px" for="check-out"><b>Check Out</b></label>
+    </div>
+    <span id="check-in">{{params.startDate.toString().slice(0,15)}}</span> -> <span id="check-out">{{params.endDate.toString().slice(0,15)}}</span>
+  </div>
+  <div class="modal-footer">
+    <button type="button"   style="background-color: red" class="btn btn-secondary" (click)="bookModalRef.hide()">Close</button>
+    <button type="button"   style="background-color: green" class="btn btn-secondary" (click)="book()" >Book</button>
+  </div>
+</ng-template>
+
+<ng-template #templateRef2>
+  <div class="modal-header">
+    <h5 class="modal-title">Review the department</h5>
+    <button type="button" class="close"  aria-label="Close" (click)="reviewDepModalRef.hide();errormsg = ''">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <small style="display: block" class="text-danger">{{this.errormsg}}</small>
+
+    <label for="stars"><b style="font-size: 18px">Stars </b>: {{starsValue}}</label>
+    <div id="stars" class="stars">
+      <span [class.clicked]="starsValue == 5 " (click)="starsValue = 5" class="fa fa-star star1" aria-hidden="true"></span>
+      <span [class.clicked]="starsValue >= 4 " (click)="starsValue = 4" class="fa fa-star star2" aria-hidden="true"></span>
+      <span [class.clicked]="starsValue >= 3 " (click)="starsValue = 3" class="fa fa-star star3" aria-hidden="true"></span>
+      <span [class.clicked]="starsValue >= 2 " (click)="starsValue = 2" class="fa fa-star star4" aria-hidden="true"></span>
+      <span [class.clicked]="starsValue >= 1 " (click)="starsValue = 1" class="fa fa-star star5" aria-hidden="true"></span>
+    </div>
+    <textarea style="margin-top: 20px" [(ngModel)]="reviewDepText" rows="4" cols="60"></textarea>
+  </div>
+  <div class="modal-footer">
+    <button type="button"   style="background-color: red" class="btn btn-secondary" (click)="reviewDepModalRef.hide();errormsg = ''">Close</button>
+    <button type="button"   style="background-color: green" class="btn btn-secondary" (click)="reviewDepartment()" >Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #templateRef3>
+  <div class="modal-header">
+    <h5 class="modal-title">Review the host</h5>
+    <button type="button" class="close"  aria-label="Close" (click)="reviewHostModalRef.hide();errormsg = ''">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <small style="display: block" class="text-danger">{{this.errormsg}}</small>
+
+    <textarea [(ngModel)]="reviewHostText" rows="4" cols="60"></textarea>
+  </div>
+  <div class="modal-footer">
+    <button type="button"   style="background-color: red" class="btn btn-secondary" (click)="reviewHostModalRef.hide();errormsg = ''">Close</button>
+    <button type="button"   style="background-color: green" class="btn btn-secondary" (click)="reviewHost()" >Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #templateRef4>
+  <div class="modal-header">
+    <h5 class="modal-title">Ask host about department</h5>
+    <button type="button" class="close"  aria-label="Close" (click)="messageHostModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <textarea [(ngModel)]="messageHostText" rows="4" cols="60"></textarea>
+  </div>
+  <div class="modal-footer">
+    <button type="button"   style="background-color: red" class="btn btn-secondary" (click)="messageHostModalRef.hide()">Close</button>
+    <button type="button"   style="background-color: green" class="btn btn-secondary" (click)="messageHost()" >Submit</button>
+  </div>
+</ng-template>
+

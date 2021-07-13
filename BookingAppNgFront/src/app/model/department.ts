@@ -1,0 +1,45 @@
+import {User} from './user';
+import {Photo} from './photo';
+import {Booking} from './booking';
+import {Review} from './review';
+
+export class Department{
+  id: number;
+  name: string;
+  costPerDay: number;
+  costPerPerson: number;
+  minBookingDays: number;
+  maxPeople: number;
+  type: string;
+  transport: string;
+  city: string;
+  address: string;
+  country: string;
+  numberOfBedrooms: number;
+  numberOfBeds: number;
+  numberOfBaths: number;
+  numberOfReviews: number;
+  area: number;
+  description: string;
+  averageRating: number;
+  hasInternet: boolean;
+  hasAirCondition: boolean;
+  hasHeat: boolean;
+  hasKitchen: boolean;
+  hasTv: boolean;
+  hasParking: boolean;
+  hasElevator: boolean;
+  hasLivingRoom: boolean;
+  smokingAllowed: boolean;
+  petsAllowed: boolean;
+  eventsAllowed: boolean;
+  longitude: number;
+  latitude: number;
+  startDate: Date;
+  endDate: Date;
+  mainPhoto: Photo;
+  photos: Array<Photo> = new Array<Photo>();
+  host: User;
+  bookings: Array<Booking> = new Array<Booking>();
+  reviews: Array<Review> = new Array<Review>();
+}

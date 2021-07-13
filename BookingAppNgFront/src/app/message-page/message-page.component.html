@@ -1,0 +1,87 @@
+
+<h3 style="margin: 20px 0 40px 0" class="text-center"> Messages</h3>
+
+<div class="text-center" *ngIf="!this.params || !params.role">
+
+  <a [routerLink]="'/users/' + userDetails.id + '/messages'" [queryParams]="{depId: this.params.depId , role: 'host'}" style="margin-right: 10px">View messages as host</a>
+  <a [routerLink]="'/users/' + userDetails.id + '/messages'" [queryParams]="{depId: this.params.depId , role: 'tenant'}">View messages as tenant</a>
+
+</div>
+
+
+
+
+<div *ngIf="this.params && params.role">
+  <div class="messages" >
+
+
+    <div  class= "message" *ngFor="let message of messages  | paginate: { id: 'revlist',
+        itemsPerPage: 5,
+        currentPage: page,
+        totalItems: messages.length }">
+
+      <div *ngIf="hasRole('ROLE_HOST') && this.params.role ==='host'" >
+        <div style="text-align: center; overflow-wrap: break-word">
+          <div style="color: lightgray; text-align: center; display: block; margin-bottom: 5px">
+            About {{message.aboutDepartment.name | titlecase}}
+          </div>
+          Message from <a [routerLink]="['/users/',message.fromUser.id.toString()]">{{message.fromUser.firstName| titlecase}} {{message.fromUser.lastName| titlecase}}: </a>
+        </div>
+
+        <div style="overflow-wrap: break-word; margin-top: 5px" class="text-center">
+          {{message.text}}
+        </div>
+
+        <div style="text-align: center; overflow-wrap: break-word; margin: 30px auto" *ngIf="message.reply">
+          You:
+          <div style="overflow-wrap: break-word; margin-top: 5px"  class="text-center">
+            {{message.reply.text}}
+          </div>
+        </div>
+        <button *ngIf="!message.reply" style="border-style: hidden; width: 100px; word-wrap: break-word; margin: 20px" class="btn btn-success float-right"  (click)="openmodal(message)"><i class="fa fa-reply" aria-hidden="true"></i> Reply</button>
+
+      </div>
+
+
+       <div *ngIf="hasRole('ROLE_TENANT') && this.params.role ==='tenant'" >
+         <div style="text-align: center; overflow-wrap: break-word">
+           <div style="color: lightgray; text-align: center; display: block; margin-bottom: 5px">
+             About {{message.aboutDepartment.name | titlecase}}
+           </div>
+           You:
+         </div>
+
+         <div style="overflow-wrap: break-word; margin-top: 5px"  class="text-center">
+           {{message.text}}
+         </div>
+
+         <div style="text-align: center; overflow-wrap: break-word; margin: 30px auto" *ngIf="message.reply">
+           Answer from <a [routerLink]="['/users/',message.reply.fromUser.id.toString()]">{{message.reply.fromUser.firstName| titlecase}} {{message.reply.fromUser.lastName| titlecase}}:</a>
+           <div style="overflow-wrap: break-word; margin-top: 5px"  class="text-center">
+             {{message.reply.text}}
+           </div>
+         </div>
+       </div>
+      <button style="border-style: hidden; width: 100px; word-wrap: break-word; margin: 20px" class="btn btn-danger float-left"  (click)="deleteMessage(message)"><i class="fa fa-trash" aria-hidden="true"></i> Delete</button>
+    </div>
+
+    <pagination-controls *ngIf="messages && messages.length > 5" style="position: relative; right: 20px"  id="revlist" (pageChange)="page = $event"></pagination-controls>
+
+  </div>
+
+  <ng-template #templateRef1>
+    <div class="modal-header">
+      <h5 class="modal-title">Send message to tenant</h5>
+      <button type="button" class="close"  aria-label="Close" (click)="replyModalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center">
+      <textarea [(ngModel)]="replyText" rows="4" cols="60"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button type="button"   style="background-color: red" class="btn btn-secondary" (click)="replyModalRef.hide()">Close</button>
+      <button type="button"   style="background-color: green" class="btn btn-secondary" (click)="reply()" >Submit</button>
+    </div>
+  </ng-template>
+</div>
